@@ -20,13 +20,14 @@
     src: index.html
     dest: /var/www/html/index.html
     mode: '0644'
-
+    
 - name: Run Nginx in foreground
-  ansible.builtin.command:
+  ansible.builtin.shell:
     cmd: nginx -g "daemon off;"
-    creates: /run/nginx.pid
-    async: 60
-    poll: 0
+  async: 60
+  poll: 0
+  environment:
+    MY_VAR: "test"
   register: nginx_result
   failed_when:
     - nginx_result is failed
