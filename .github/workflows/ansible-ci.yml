@@ -1,0 +1,60 @@
+name: Ansible CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  ansible-checks:
+    name: Проверка и тестирование Ansible
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Получение кода
+        uses: actions/checkout@v4
+
+      - name: 🔧 Установка Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y software-properties-common
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install -y ansible
+
+      - name: 🔍 Проверка синтаксиса плейбуков
+        run: |
+          ansible-playbook --syntax-check playbooks/*.yml
+
+      - name: 🧹 Проверка с помощью ansible-lint
+        run: |
+          sudo apt install -y ansible-lint
+          ansible-lint playbooks/*.yml
+
+      - name: 🐳 Установка Docker
+        run: |
+          sudo apt install -y docker.io
+
+      - name: 🧱 Сборка Docker-образа
+        run: |
+          docker build -t ubuntu-sshd .
+
+      - name: 🚀 Запуск тестового контейнера
+        run: |
+          docker run -d --name server1 -p 2201:22 -p 8001:80 ubuntu-sshd
+
+      - name: 🔐 Настройка SSH-ключа
+        run: |
+          ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+          cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 2201 "mkdir -p /root/.ssh && cat >> /root/.ssh/authorized_keys"
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+
+      - name: 🧪 Тестирование плейбука
+        run: |
+          ansible-playbook -i hosts.yml playbooks/deploy-nginx.yml --check
+
+      - name: 🧾 Отправка отчета (опционально)
+        if: ${{ failure() }}
+        run: |
+          echo "❌ Тестирование завершено с ошибками!"
