@@ -1,3 +1,6 @@
 ---
 quiet: true
-use_fqcn: true
+enable_list:
+  - fqcn[action]          # Проверяет использование FQCN
+  - yaml                  # Проверяет корректность YAML
+  - deprecated[module]    # Предупреждает об устаревших модулях
