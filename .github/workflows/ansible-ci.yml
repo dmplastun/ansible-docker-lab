@@ -72,10 +72,18 @@ jobs:
 
       - name: 🔐 Настройка SSH-ключа
         run: |
+          # Генерация SSH-ключа (без пароля)
           ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
+      
+          # Отключение проверки ключей хоста (только для тестовой среды!)
+          echo "StrictHostKeyChecking=no" >> ~/.ssh/config
+      
+          # Добавление временного SSH-агента
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+      
+          # Копирование публичного ключа на сервер
           cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 2201 "mkdir -p /root/.ssh && cat >> /root/.ssh/authorized_keys"
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
       - name: 🧪 Тестирование плейбука
         run: |
