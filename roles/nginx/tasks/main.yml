@@ -20,7 +20,6 @@
     src: index.html
     dest: /var/www/html/index.html
     mode: '0644'
-    
 - name: Run Nginx in foreground
   ansible.builtin.command:
     cmd: nginx -g "daemon off;"
