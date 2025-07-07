@@ -22,12 +22,10 @@
     mode: '0644'
     
 - name: Run Nginx in foreground
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: nginx -g "daemon off;"
-  async: 60
-  poll: 0
-  environment:
-    MY_VAR: "test"
+    creates: /run/nginx.pid
+  ignore_errors: true
   register: nginx_result
   failed_when:
     - nginx_result is failed
