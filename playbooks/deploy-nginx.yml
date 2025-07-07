@@ -1,0 +1,6 @@
+---
+- name: Развертывание Nginx через роль
+  hosts: all
+  become: yes
+  roles:
+    - nginx

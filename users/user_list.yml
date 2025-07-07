@@ -1,0 +1,9 @@
+users:
+  - name: dev_user
+    group: sudo
+    shell: /bin/bash
+    password: "$6$hash_example"  # можно использовать mkpasswd --method=sha-512
+  - name: app_user
+    group: www-data
+    shell: /bin/false
+    password: "$6$hash_example"
