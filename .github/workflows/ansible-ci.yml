@@ -35,32 +35,32 @@ jobs:
         run: |
           # Удаление старых версий (если были)
           sudo apt remove -y docker docker-engine docker.io containerd runc || true
-      
+
           # Очистка пакетов
           sudo apt autoremove -y
-      
+
           # Установка зависимостей
           sudo apt update
           sudo apt install -y ca-certificates curl gnupg
-      
+
           # Добавление GPG-ключа Docker
           sudo install -m 0755 -d /etc/apt/keyrings
           curl -fsSL https://download.docker.com/linux/ubuntu/gpg  | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-      
+
           # Добавление репозитория Docker
           echo \
             "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu  \
             $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-      
+
           # Обновление списка пакетов
           sudo apt update
-      
+
           # Установка Docker
           sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-      
+
           # Проверка установки
           docker --version
-          sudo docker run hello-world
+          sudo docker info
 
       - name: 🧱 Сборка Docker-образа
         run: |
@@ -70,20 +70,25 @@ jobs:
         run: |
           docker run -d --name server1 -p 2201:22 -p 8001:80 ubuntu-sshd
 
+      - name: ⏱️ Подождать, пока SSH запустится
+        run: |
+          sleep 5
+
       - name: 🔐 Настройка SSH-ключа
         run: |
           # Генерация SSH-ключа (без пароля)
           ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
-      
+
           # Отключение проверки ключей хоста (только для тестовой среды!)
           echo "StrictHostKeyChecking=no" >> ~/.ssh/config
-      
+          echo "UserKnownHostsFile=/dev/null" >> ~/.ssh/config
+
           # Добавление временного SSH-агента
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
-      
+
           # Копирование публичного ключа на сервер
-          cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 2201 "mkdir -p /root/.ssh && cat >> /root/.ssh/authorized_keys"
+          cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 2201 "mkdir -p /root/.ssh && chmod 700 /root/.ssh && cat >> /root/.ssh/authorized_keys"
 
       - name: 🧪 Тестирование плейбука
         run: |
