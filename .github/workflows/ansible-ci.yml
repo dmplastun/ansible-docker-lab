@@ -64,7 +64,7 @@ jobs:
 
       - name: 🧱 Сборка Docker-образа
         run: |
-          docker build -t ubuntu-sshd .
+          docker build -t ubuntu-sshd ./files/
 
       - name: 🚀 Запуск тестового контейнера
         run: |
