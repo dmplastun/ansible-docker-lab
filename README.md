@@ -71,5 +71,5 @@ make help            #Список доступных команд
 ```
 👤 dmplastun
 📧 dmitrij.plastun@gmail.com
-🔗 [https://github.com/dmplastun/ansible-docker-lab/]
+🔗 https://github.com/dmplastun/ansible-docker-lab/
 ```
