@@ -24,9 +24,10 @@
 - name: Run Nginx in foreground
   ansible.builtin.command:
     cmd: nginx -g "daemon off;"
-  creates: /run/nginx.pid
-  async: 60
-  poll: 0
+    creates: /run/nginx.pid
+    async: 60
+    poll: 0
+  register: nginx_result
   failed_when:
     - nginx_result is failed
     - "'Address already in use' not in nginx_result.msg"
