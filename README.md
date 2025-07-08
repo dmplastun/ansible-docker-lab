@@ -35,20 +35,20 @@ docker build -t ubuntu-sshd .
 
 ### 2. Запуск 9 контейнеров
 ```
-for i in {1..10}; do
+for i in {1..9}; do
   docker run -d --name server$i -p 22$i:22 -p 80$i:80 ubuntu-sshd
 done
 ```
 ### 3. Настройка SSH-доступа
 ```
 ssh-keygen -t rsa -b 4096
-for i in {1..10}; do
+for i in {1..9}; do
   ssh-copy-id -i ~/.ssh/id_rsa.pub root@localhost -p 22$i
 done
 ```
 #### Если возникают ошибки проверки ключей
 ```
-for i in {1..10}; do
+for i in {1..9}; do
   ssh-keygen -R '[localhost]:22'$i
 done
 ```
