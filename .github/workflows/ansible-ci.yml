@@ -68,7 +68,7 @@ jobs:
 
       - name: 🚀 Запуск тестового контейнера
         run: |
-          docker run -d --name server1 -p 2201:22 -p 8001:80 ubuntu-sshd
+          docker run -d --name server1 -p 221:22 -p 8001:80 ubuntu-sshd
 
       - name: ⏱️ Подождать, пока SSH запустится
         run: |
@@ -88,7 +88,7 @@ jobs:
           ssh-add ~/.ssh/id_rsa
 
           # Копирование публичного ключа на сервер
-          cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 2201 "mkdir -p /root/.ssh && chmod 700 /root/.ssh && cat >> /root/.ssh/authorized_keys"
+          cat ~/.ssh/id_rsa.pub | ssh root@localhost -p 221 "mkdir -p /root/.ssh && chmod 700 /root/.ssh && cat >> /root/.ssh/authorized_keys"
 
       - name: 🧪 Тестирование плейбука
         run: |
