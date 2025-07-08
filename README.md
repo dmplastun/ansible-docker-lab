@@ -1,3 +1,5 @@
+[![Ansible CI Pipeline](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml/badge.svg)](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml)
+
 # 🛠️ Ansible + Docker Лабораторный Проект
 
 Этот репозиторий содержит пример автоматизации настройки серверов через **Ansible** с использованием **Docker-контейнеров** как управляемых хостов.
