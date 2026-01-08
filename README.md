@@ -1,77 +1,83 @@
 [![Ansible CI Pipeline](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml/badge.svg)](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml)
 
-# 🛠️ Ansible + Docker Лабораторный Проект
+## 🛠️ Ansible + Docker Lab Project
 
-Этот репозиторий содержит пример автоматизации настройки серверов через **Ansible** с использованием **Docker-контейнеров** как управляемых хостов.
+This repository demonstrates server configuration automation using Ansible with Docker containers as managed hosts.
+​
+## 🎯 Project Goals
 
-## 🎯 Цель проекта
-
-Научиться использовать Ansible для автоматизации:
-- Установки ПО
-- Настройки пользователей
-- Управления cron-заданиями
-на 9 Ubuntu-серверах, развернутых в Docker.
-
+Learn to use Ansible for automation:
+```
+Software installation
+User configuration
+Cron job management across 9 Ubuntu servers running in Docker.​
+```
 ---
 
-## 📦 Что включает проект
-
-- `Dockerfile` — образ Ubuntu с SSH/Nginx/cron
-- `hosts.yml` — файл инвентаризации для Ansible
-- `ansible.cfg` — конфигурация Ansible
-- `Makefile` — удобные команды для запуска плейбуков
-- `playbooks/` — каталог с плейбуками:
-  - `deploy-nginx.yml` — развертывание Nginx через роль
-- `roles/` — структура ролей Ansible (например, `nginx`)
-- `README.md` — документация проекта
-
+## 📦 Project Contents
+```   
+Dockerfile — Ubuntu image with SSH/Nginx/cron
+hosts.yml — Ansible inventory file
+ansible.cfg — Ansible configuration
+Makefile — Commands to run playbooks
+playbooks/ — Playbooks directory:
+deploy-nginx.yml — Nginx deployment via role
+roles/ — Ansible roles structure (e.g., nginx)
+README.md — Project documentation​
+```
 ---
 
-## 🚀 Как запустить проект
+##🚀 How to Run
+### 1. Build Docker Image
 
-### 1. Сборка образа Docker
-
-```bash
+```
 docker build -t ubuntu-sshd .
 ```
 
-### 2. Запуск 9 контейнеров
+### 2. Start 9 Containers
 ```
 for i in {1..9}; do
   docker run -d --name server$i -p 22$i:22 -p 80$i:80 ubuntu-sshd
 done
 ```
-### 3. Настройка SSH-доступа
+### 3. Configure SSH Access
 ```
 ssh-keygen -t rsa -b 4096
 for i in {1..9}; do
   ssh-copy-id -i ~/.ssh/id_rsa.pub root@localhost -p 22$i
 done
 ```
-#### Если возникают ошибки проверки ключей
+#### If key verification errors occur:
 ```
 for i in {1..9}; do
   ssh-keygen -R '[localhost]:22'$i
 done
 ```
-### 4. Проверка подключение через Ansible
+### 4. Test Ansible Connectivity
 ```
 make ping
 ```
-### 📝 Дополнительные команды из Makefile
+### 📝 Makefile Commands
 ```
 make ping            #Проверка доступности всех хостов
 make deploy-nginx    #Развертывание Nginx через роль
 make check-syntax    #Проверка синтаксиса плейбуков
 make help            #Список доступных команд
 ```
-### 🔐 Безопасность
-    Используется SSH-авторизация по ключам
-    Пароль root задан как password (только для тестовой среды)
-    Рекомендуется использовать ansible-vault для управления секретами в production
-### 📌 Автор
+### 🔐 Security
 ```
+Uses SSH key authentication
+
+Root password set to password (test environment only)
+
+Use ansible-vault for secrets in production
+```
+​
+### 📌 Author
+
 👤 dmplastun
 📧 dmitrij.plastun@gmail.com
-🔗 https://github.com/dmplastun/ansible-docker-lab/
+🔗
+https://github.com/dmplastun/ansible-docker-lab
+​
 ```
