@@ -1,6 +1,6 @@
 [![Ansible CI Pipeline](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml/badge.svg)](https://github.com/dmplastun/ansible-docker-lab/actions/workflows/ansible-ci.yml)
 
-## 🛠️ Ansible + Docker Lab Project
+## 🛠️ Infrastructure Governance & Automated Provisioning Engine (Ansible & Docker)
 
 This repository demonstrates server configuration automation using Ansible with Docker containers as managed hosts.
 ​
